@@ -1,0 +1,5 @@
+<resources>
+    <string name="lib_img_crop_label_original">Origineel</string>
+    <string name="lib_img_crop_label_edit_photo">Foto bewerken</string>
+    <string name="lib_img_crop_menu_crop">Bijsnijden</string>
+</resources>

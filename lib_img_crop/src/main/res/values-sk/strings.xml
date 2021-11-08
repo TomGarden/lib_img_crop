@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="lib_img_crop_label_original">Pôvodná</string>
+    <string name="lib_img_crop_label_edit_photo">Upraviť fotografiu</string>
+    <string name="lib_img_crop_menu_crop">Orezať</string>
+    
+</resources>

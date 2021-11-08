@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_img_crop_label_original">オリジナル</string>
+    <string name="lib_img_crop_label_edit_photo">画像編集</string>
+
+    <string name="lib_img_crop_menu_crop">切り抜き</string>
+
+    <string name="lib_img_crop_scale">拡大</string>
+    <string name="lib_img_crop_rotate">回転</string>
+    <string name="lib_img_crop_crop">比率</string>
+</resources>

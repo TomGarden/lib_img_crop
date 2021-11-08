@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_img_crop_label_edit_photo">사진 편집</string>
+    <string name="lib_img_crop_label_original">원본</string>
+    <string name="lib_img_crop_menu_crop">확인</string>
+</resources>
