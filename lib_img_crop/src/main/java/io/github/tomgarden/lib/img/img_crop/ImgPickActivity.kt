@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +16,7 @@ import io.github.tomgarden.lib.img.img_crop.copy_from_ucrom.ResultActivity
 import io.github.tomgarden.lib.log.Logger
 
 /**
- * describe :
+ * describe : 透明 , 中转页面
  *
  * author : tom
  *
@@ -23,14 +24,17 @@ import io.github.tomgarden.lib.log.Logger
  */
 class ImgPickActivity : ComponentActivity() {
 
+    /*用于打开图片选择页面 , 并监听结果*/
     private val imgPickResultLauncher by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
+                toast(R.string.lib_img_crop_img_pick_cancel)
                 finish()
                 return@registerForActivityResult
             }
 
             val srcUri = activityResult.data?.data ?: let {
+                toast(R.string.lib_img_crop_img_pick_invalid)
                 finish()
                 return@registerForActivityResult
             }
@@ -39,27 +43,36 @@ class ImgPickActivity : ComponentActivity() {
             imgCropResultLauncher.launch(cropIntent)
         }
     }
+
+    /*用于打开图片裁切页面 , 并监听结果*/
     private val imgCropResultLauncher by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
+                toast(R.string.lib_img_crop_img_crop_cancle)
                 finish()
                 return@registerForActivityResult
             }
             val resultIntent = activityResult.data ?: let {
+                toast(R.string.lib_img_crop_img_crop_invalid)
                 finish()
                 return@registerForActivityResult
             }
             val resultUri: Uri = UCrop.getOutput(resultIntent) ?: let {
+                toast(R.string.lib_img_crop_img_crop_invalid)
                 finish()
                 return@registerForActivityResult
             }
 
-            imgCropConfirmLauncher.launch(ResultActivity.getIntentWithUri(this, resultUri))
+            val intent = ResultActivity.getIntentWithUri(this, resultUri)
+            imgCropConfirmLauncher.launch(intent)
         }
     }
+
+    /*用于打开剪裁确认页面 , 并监听结果*/
     private val imgCropConfirmLauncher by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
+                toast(R.string.lib_img_crop_img_crop_confirm_abandon)
                 finish()
                 return@registerForActivityResult
             }
@@ -111,4 +124,5 @@ class ImgPickActivity : ComponentActivity() {
         imgCropResultLauncher.unregister()
     }
 
+    private fun toast(strId: Int) = Toast.makeText(this, strId, Toast.LENGTH_SHORT).show()
 }

@@ -15,6 +15,13 @@
     <string name="lib_img_crop_save">Save</string>
 
 
+    <string name="lib_img_crop_img_pick_cancel">Cancel image pick</string>
+    <string name="lib_img_crop_img_pick_invalid">Invalid image</string>
+    <string name="lib_img_crop_img_crop_cancle">Cancel image crop</string>
+    <string name="lib_img_crop_img_crop_invalid">Invalid crop</string>
+    <string name="lib_img_crop_img_crop_confirm_abandon">Abandon image crop result</string>
+
     <!--剪裁后预览页面用到的字段-->
     <string name="lib_img_crop_format_crop_result_d_d">Crop Result (%1$dx%2$d)</string>
+
 </resources>

@@ -17,10 +17,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.yalantis.ucrop.util.FileUtils;
 import com.yalantis.ucrop.view.UCropView;
 
 import java.io.File;
 
+import io.github.tomgarden.lib.img.img_crop.ImgCrop;
 import io.github.tomgarden.lib.img.img_crop.R;
 
 /**
@@ -31,6 +33,7 @@ public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "ResultActivity";
     private File preViewImg = null;
 
+    /* 获取打开当前页的 Intent */
     public static Intent getIntentWithUri(@NonNull Context context, @NonNull Uri uri) {
         Intent intent = new Intent(context, ResultActivity.class);
         intent.setData(uri);
@@ -81,13 +84,27 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.lib_img_crop_menu_save) {
-            setResult(Activity.RESULT_OK, getIntent());
-            finish();
+
+            Uri srcUri = getIntent().getData();
+            File destFile = ImgCrop.Companion.getInstance().getDestFile();
+            String destPath = destFile.getPath();
+
+            try {
+                FileUtils.copyFile(srcUri.getPath(), destPath);
+                Intent resultIntent = new Intent();
+                Uri resultUri = Uri.fromFile(destFile);
+                resultIntent.setData(resultUri);
+                setResult(Activity.RESULT_OK, resultIntent);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                setResult(Activity.RESULT_CANCELED);
+            } finally {
+                finish();
+            }
         } else if (item.getItemId() == android.R.id.home) {
             preViewImg.delete();
             setResult(Activity.RESULT_CANCELED);
             finish();
-            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

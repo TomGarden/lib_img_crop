@@ -13,6 +13,12 @@
 
     <string name="lib_img_crop_save">保存</string>
 
+
+    <string name="lib_img_crop_img_pick_cancel">取消图片选择</string>
+    <string name="lib_img_crop_img_pick_invalid">无效图片</string>
+    <string name="lib_img_crop_img_crop_cancle">取消图片剪裁</string>
+    <string name="lib_img_crop_img_crop_invalid">无效剪裁</string>
+    <string name="lib_img_crop_img_crop_confirm_abandon">放弃图像剪裁结果</string>
     <!--剪裁后预览页面用到的字段-->
     <string name="lib_img_crop_format_crop_result_d_d">裁切结果 (%1$dx%2$d)</string>
 

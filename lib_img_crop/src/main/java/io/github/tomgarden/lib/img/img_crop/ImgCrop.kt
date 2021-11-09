@@ -19,7 +19,7 @@ import java.io.File
  * time : 2021-11-03
  */
 class ImgCrop private constructor() {
-    private val SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage"
+    private val tempCroppedImageName = "TempCropImage"
     private var pickCropResult: Function1<Uri?, Unit>? = null
 
     /*指定文件路径和文件名会造成新文件覆盖旧文件的效果 , 可以节省存储空间*/
@@ -45,28 +45,14 @@ class ImgCrop private constructor() {
         return this
     }
 
-    private fun pickImg(context: Context, destFileName: String): ImgCrop {
-        val path = context.cacheDir.path
-        this.destPath = path
-        return pickImg(context, path, destFileName)
-    }
-
-
-    private fun pickImg(context: Context, destPath: String, destFileName: String): ImgCrop {
-        this.destPath = destPath
-        this.destFileName = destFileName
-        ImgPickActivity.start(context)
-        return this
-    }
-
+    /** 获取裁切视图 intent ; 用于打开裁切页面 */
     internal fun getCropIntent(context: Context, srcUri: Uri): Intent {
         val path = destPath ?: context.cacheDir.name
-        val name = destFileName ?: SAMPLE_CROPPED_IMAGE_NAME
-        return getCropIntent(context, srcUri, path, name)
+        return getCropIntent(context, srcUri, path)
     }
 
-    private fun getCropIntent(context: Context, srcUri: Uri, destPath: String, destFileName: String): Intent {
-        val destinationFileName: String = "$destFileName.jpg"
+    private fun getCropIntent(context: Context, srcUri: Uri, destPath: String): Intent {
+        val destinationFileName: String = "$tempCroppedImageName.jpg"
 
         var uCrop: UCrop = UCrop.of(srcUri, Uri.fromFile(File(destPath, destinationFileName)))
         uCrop = advancedConfig(context, uCrop)
@@ -161,4 +147,21 @@ class ImgCrop private constructor() {
         return this
     }
 
+    fun getDestFile(): File = File(getUnNullDestPath(), getUnNullDestName())
+    fun getDestFilePath() = getDestFile().path
+    fun getDestUri() = Uri.fromFile(getDestFile())
+
+    private fun getUnNullDestPath(): String = destPath.let { destPath ->
+        when {
+            destPath.isNullOrEmpty() -> throw RuntimeException("destPath isNullOrEmpty()")
+            else -> destPath
+        }
+    }
+
+    private fun getUnNullDestName(): String = destFileName.let { destFileName ->
+        when {
+            destFileName.isNullOrEmpty() -> throw RuntimeException("destFileName isNullOrEmpty()")
+            else -> "$destFileName.jpg"
+        }
+    }
 }
