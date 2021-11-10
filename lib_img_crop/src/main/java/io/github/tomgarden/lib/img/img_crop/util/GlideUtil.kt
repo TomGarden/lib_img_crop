@@ -101,7 +101,7 @@ object GlideUtil {
     fun getBitmapPX(context: Context, file: File?, signKey: Any? = null, w_px: Float? = null, h_px: Float? = null): Bitmap? = when {
         file == null -> null
         else -> getBitmapPX(context, { rb: RequestBuilder<Bitmap> ->
-            val requestBuilder: RequestBuilder<Bitmap> = rb.load(file)
+            val requestBuilder: RequestBuilder<Bitmap> = rb.load(file).fitCenter()
             signKey?.let { requestBuilder.signature(ObjectKey(signKey)) }
             requestBuilder
         }, w_px, h_px)

@@ -3,13 +3,16 @@ package io.github.tomgarden.lib.img.img_crop
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.model.AspectRatio
 import com.yalantis.ucrop.view.CropImageView
 import io.github.tomgarden.lib.img.img_crop.copy_from_ucrom.UCropActivity
+import io.github.tomgarden.lib.img.img_crop.util.LibImgCropUtil
 import io.github.tomgarden.lib.log.Logger
 import java.io.File
+import java.net.URI
 
 /**
  * describe :
@@ -58,7 +61,7 @@ class ImgCrop private constructor() {
         val destinationFileName: String = "$tempCroppedImageName.jpg"
 
         var uCrop: UCrop = UCrop.of(srcUri, Uri.fromFile(File(destPath, destinationFileName)))
-        uCrop = advancedConfig(context, uCrop)
+        uCrop = advancedConfig(context, uCrop, srcUri)
 
         val intent = uCrop.getIntent(context)
         intent.setClass(context, UCropActivity::class.java)
@@ -71,7 +74,7 @@ class ImgCrop private constructor() {
      * @param uCrop - ucrop builder instance
      * @return - ucrop builder instance
      */
-    private fun advancedConfig(context: Context, uCrop: UCrop): UCrop {
+    private fun advancedConfig(context: Context, uCrop: UCrop, srcUri: Uri): UCrop {
         val options = UCrop.Options()
 
         options.setCompressionFormat(defaultCompressFormat)     /*压缩后的文件格式 , 默认 jpg*/
@@ -115,6 +118,20 @@ class ImgCrop private constructor() {
         options.setRootViewBackgroundColor(ContextCompat.getColor(this, R.color.your_color_res));
         options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
        */
+
+        /*设置最大可缩放的尺寸*/
+        val bitmapOptions = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        val inputStream = context.getContentResolver().openInputStream(srcUri)
+        val bitmap = BitmapFactory.decodeStream(inputStream, null, bitmapOptions)
+        inputStream?.close()
+        bitmap?.let {
+            val slide = Math.max(bitmap.width, bitmap.height)
+            val scaleValue = slide.div(7)/*square 边长是 7 的整数倍*/
+            options.setMaxScaleMultiplier(scaleValue.toFloat())
+        }?.let {
+            /*已知过大的图片(测试文件>=100MB)是无法读取出 bitmap 的 , 设置一个足够大的值*/
+            options.setMaxScaleMultiplier(4000f)
+        }
 
         // Aspect ratio options
         val array: MutableList<AspectRatio> = mutableListOf(
