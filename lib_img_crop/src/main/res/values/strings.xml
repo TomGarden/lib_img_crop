@@ -2,6 +2,7 @@
 <resources>
 
     <string name="lib_img_crop_label_original">Original</string>
+    <string name="lib_img_crop_label_default_aspect_ratio">Default</string>
     <string name="lib_img_crop_label_edit_photo">Edit Photo</string>
 
     <string name="lib_img_crop_menu_crop">Crop</string>
@@ -20,6 +21,7 @@
     <string name="lib_img_crop_img_crop_cancle">Cancel image crop</string>
     <string name="lib_img_crop_img_crop_invalid">Invalid crop</string>
     <string name="lib_img_crop_img_crop_confirm_abandon">Abandon image crop result</string>
+    <string name="lib_img_crop_img_crop_get_crop_result_failed">Get crop result failed</string>
 
     <!--剪裁后预览页面用到的字段-->
     <string name="lib_img_crop_format_crop_result_d_d">Crop Result (%1$dx%2$d)</string>

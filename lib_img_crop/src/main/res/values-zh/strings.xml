@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lib_img_crop_label_original">原始比例</string>
+    <string name="lib_img_crop_label_default_aspect_ratio">默认</string>
     <string name="lib_img_crop_label_edit_photo">编辑图像</string>
 
     <string name="lib_img_crop_menu_crop">裁切</string>
@@ -19,6 +20,7 @@
     <string name="lib_img_crop_img_crop_cancle">取消图片剪裁</string>
     <string name="lib_img_crop_img_crop_invalid">无效剪裁</string>
     <string name="lib_img_crop_img_crop_confirm_abandon">放弃图像剪裁结果</string>
+    <string name="lib_img_crop_img_crop_get_crop_result_failed">获取剪裁结果失败</string>
     <!--剪裁后预览页面用到的字段-->
     <string name="lib_img_crop_format_crop_result_d_d">裁切结果 (%1$dx%2$d)</string>
 

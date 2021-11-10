@@ -20,11 +20,14 @@ import java.io.File
  */
 class ImgCrop private constructor() {
     private val tempCroppedImageName = "TempCropImage"
-    private var pickCropResult: Function1<Uri?, Unit>? = null
+    private var pickCropResult: Function1<Uri, Unit>? = null
+    val defaultCompressFormat = Bitmap.CompressFormat.JPEG
 
     /*指定文件路径和文件名会造成新文件覆盖旧文件的效果 , 可以节省存储空间*/
     private var destPath: String? = null
     private var destFileName: String? = null
+    var defaultAspectRatio: AspectRatio = AspectRatio("1:1", 1f, 1f)
+        private set
 
     companion object {
         private var INSTANCE: ImgCrop? = null
@@ -71,7 +74,7 @@ class ImgCrop private constructor() {
     private fun advancedConfig(context: Context, uCrop: UCrop): UCrop {
         val options = UCrop.Options()
 
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG)/*压缩后的文件格式 , 默认 jpg*/
+        options.setCompressionFormat(defaultCompressFormat)     /*压缩后的文件格式 , 默认 jpg*/
         options.setCompressionQuality(90)                       /*压缩后的文件质量 , 默认 90*/
         options.setHideBottomControls(false)                    /*隐藏裁剪页面底部面板 , 默认 false*/
         options.setFreeStyleCropEnabled(false)                  /*裁切框尺寸是否随意调整 , 默认 false , 支持调整则手势事件有冲突 , 需要摸索才能学会用法*/
@@ -114,27 +117,41 @@ class ImgCrop private constructor() {
        */
 
         // Aspect ratio options
-        options.setAspectRatioOptions(
-            0,
-            AspectRatio("1:1", 1f, 1f),
+        val array: MutableList<AspectRatio> = mutableListOf(
             AspectRatio("3:4", 3f, 4f),
             AspectRatio(context.getString(R.string.lib_img_crop_label_original), CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
             AspectRatio("3:2", 3f, 2f),
             AspectRatio("16:9", 16f, 9f),
         )
-
+        if (defaultAspectRatio.aspectRatioX == defaultAspectRatio.aspectRatioY) {
+            array.add(0, defaultAspectRatio)
+        } else {
+            array.add(0, AspectRatio("1:1", 1f, 1f))
+            array.add(0, defaultAspectRatio)
+        }
+        options.setAspectRatioOptions(0, *array.toTypedArray())
         return uCrop.withOptions(options)
     }
 
-    fun pickCropResult(pickCropResult: Function1<Uri?, Unit>?): ImgCrop {
+    fun pickCropResult(pickCropResult: Function1<Uri, Unit>?): ImgCrop {
         this.pickCropResult = pickCropResult
         return this
     }
 
     /**选择并且裁剪完成*/
-    internal fun pickCropDone(resultUri: Uri?) {
+    internal fun pickCropDone(resultUri: Uri) {
         Logger.e("剪裁结果 : $resultUri")
         pickCropResult?.invoke(resultUri)
+    }
+
+    fun defaultAspectRatio(context: Context, pair: Pair<Float, Float>?): ImgCrop {
+        pair?.let { defaultAspectRatio(context, it.first, it.second) }
+        return this
+    }
+
+    fun defaultAspectRatio(context: Context, aspectRatioX: Float, aspectRatioY: Float): ImgCrop {
+        defaultAspectRatio = AspectRatio(context.getString(R.string.lib_img_crop_label_default_aspect_ratio), aspectRatioX, aspectRatioY)
+        return this
     }
 
     fun destPath(destPath: String): ImgCrop {

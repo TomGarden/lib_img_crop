@@ -77,7 +77,9 @@ class ImgPickActivity : ComponentActivity() {
                 return@registerForActivityResult
             }
             Logger.d("裁切后的文件位置" + activityResult.data?.data)
-            ImgCrop.getInstance().pickCropDone(activityResult.data?.data)
+            activityResult.data?.data?.let { uri ->
+                ImgCrop.getInstance().pickCropDone(uri)
+            } ?: toast(R.string.lib_img_crop_img_crop_get_crop_result_failed)
         }
     }
 
