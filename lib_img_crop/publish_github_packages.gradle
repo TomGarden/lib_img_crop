@@ -1,0 +1,83 @@
+/*
+上传到公共组件库  https://github.com/TomGarden/TomAndroidLibs
+而不是上传到本代码所在的代码仓库
+
+要想手动发布就去执行 bintrayUpload.sh
+Github Actions 工作流暂未完成
+* */
+
+ext {
+    moduleVersionCode = 1
+    moduleVersionName = '0.0.1'
+    moduleName = 'lib_img_crop'
+
+    mavenGroupId = 'io.github.tomgarden'
+}
+
+task androidSourcesJar(type: Jar) {
+    /*生成 sources.jar 应对生成的 aar 跳转代码无法阅读的问题*/
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+
+    publications {
+        gpr(MavenPublication) {
+            groupId mavenGroupId
+            artifactId moduleName
+            version moduleVersionName
+            artifact("$buildDir/outputs/aar/$moduleName-release.aar")
+            // 将 generateSourcesJar Task 生成的 sources.jar 也一并上传
+            artifact(androidSourcesJar)
+        }
+    }
+
+    repositories {
+        //如果失败了 一个一个上传即可
+
+        //上传到 maven center
+//        maven {
+//            name = moduleName
+//            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//            credentials {
+//                username = System.getenv("MAVEN_USERNAME")
+//                password = System.getenv("MAVEN_PASSWORD")
+//            }
+//        }
+
+        //上传到 Github Packages
+        maven {
+            name = moduleName
+            url = uri("https://maven.pkg.github.com/TomGarden/$moduleName")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("TOMGARADEN_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOMGARADEN_WRITE_PACKAGES_TOKEN")
+            }
+        }
+    }
+}
+
+//这个代码块是权宜之计 ; 并非所有情况下都需要做这个代码块 , 如果本身可以打出需要的包名的包 , 此处即可注释
+android {
+    buildTypes {
+        archivesBaseName = moduleName
+    }
+}
+
+task testTask {
+    //测试 gradle 语法
+    println(System.getenv("TOMGARADEN_USERNAME"))
+    println(System.getenv("TOMGARADEN_WRITE_PACKAGES_TOKEN"))
+    println("$buildDir/outputs/aar/$moduleName-release.aar")
+}
+
+//在 project 执行命令, 即可完成上传
+//分步执行
+//../gradlew clean
+//../gradlew build
+//../gradlew publish
+//一次执行所有
+//./gradlew clean build publish
+//仅针对 LibLog 执行相关命令
+//./gradlew :LibLog:clean :LibLog:build :LibLog:publish

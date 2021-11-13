@@ -6,7 +6,7 @@ buildscript {
         targetSdkVersion = 31
     }
 
-        repositories {
+    repositories {
         google()
         mavenCentral()
     }
@@ -17,31 +17,6 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-        maven { url "https://oss.jfrog.org/libs-snapshot" }
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
-        maven {
-            url = uri("https://maven.pkg.github.com/TomGarden/lib_log")
-            url = uri("https://maven.pkg.github.com/TomGarden/lib_system_bar")
-            url = uri("https://maven.pkg.github.com/TomGarden/lib_pickcolor")
-
-            credentials {
-                //不限的 github 账户名
-                username = System.getenv("TOMGARADEN_USERNAME")
-                //与 github 账户名成对的 具有 read:packages 权限的 token
-                password = System.getenv("TOMGARADEN_READ_PACKAGES_TOKEN")
-            }
-        }
-    }
-
 }
 
 task clean(type: Delete) {

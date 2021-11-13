@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="lib_img_crop_label_original">Original</string>
     <string name="lib_img_crop_label_default_aspect_ratio">Default</string>
