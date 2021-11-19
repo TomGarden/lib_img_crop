@@ -1,6 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
+        lib_img_crop_project_name = 'lib_img_crop'
+
         compileSdkVersion = 31
         buildToolsVersion = "30.0.3"
         targetSdkVersion = 31
@@ -16,6 +18,29 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://jitpack.io' }
+        maven { url "https://oss.jfrog.org/libs-snapshot" }
+        maven { url 'https://maven.google.com/' }
+        maven {
+            url = uri("https://maven.pkg.github.com/TomGarden/lib_log")
+            url = uri("https://maven.pkg.github.com/TomGarden/lib_img_crop")
+            url = uri("https://maven.pkg.github.com/TomGarden/lib_pickcolor")
+
+            credentials {
+                //不限的 github 账户名
+                username = System.getenv("TOMGARADEN_USERNAME")
+                //与 github 账户名成对的 具有 read:packages 权限的 token
+                password = System.getenv("TOMGARADEN_READ_PACKAGES_TOKEN")
+            }
+        }
     }
 }
 

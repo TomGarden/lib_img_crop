@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.11927083333333334" />
+        <entry key="lib_img_crop/src/main/res/layout/lib_img_crop_ucrop_controls.xml" value="0.17291666666666666" />
         <entry key="lib_img_crop/src/main/res/layout/lib_img_crop_ucrop_layout_rotate_wheel.xml" value="0.3177083333333333" />
       </map>
     </option>
