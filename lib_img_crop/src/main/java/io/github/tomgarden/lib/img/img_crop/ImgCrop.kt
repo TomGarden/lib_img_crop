@@ -32,6 +32,12 @@ class ImgCrop private constructor() {
     var defaultAspectRatio: AspectRatio = AspectRatio("1:1", 1f, 1f)
         private set
 
+    private var setToolbarColor: Int? = null
+    private var setStatusBarColor: Int? = null
+    private var setToolbarWidgetColor: Int? = null
+    private var setRootViewBackgroundColor: Int? = null
+    private var setActiveControlsWidgetColor: Int? = null
+
     companion object {
         private var INSTANCE: ImgCrop? = null
 
@@ -111,13 +117,14 @@ class ImgCrop private constructor() {
         options.setToolbarCropDrawable(R.drawable.your_crop_icon);
         options.setToolbarCancelDrawable(R.drawable.your_cancel_icon);
 
-        // Color palette
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setRootViewBackgroundColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
        */
+        // Color palette
+        this.setToolbarColor?.let { options.setToolbarColor(it) }
+        this.setStatusBarColor?.let { options.setStatusBarColor(it) }
+        this.setToolbarWidgetColor?.let { options.setToolbarWidgetColor(it) }
+        this.setRootViewBackgroundColor?.let { options.setRootViewBackgroundColor(it) }
+        this.setActiveControlsWidgetColor?.let { options.setActiveControlsWidgetColor(it) }
+
 
         /*设置最大可缩放的尺寸*/
         val bitmapOptions = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -173,6 +180,31 @@ class ImgCrop private constructor() {
 
     fun destPath(destPath: String): ImgCrop {
         this.destPath = destPath
+        return this
+    }
+
+    fun setToolbarColor(color: Int): ImgCrop {
+        this.setToolbarColor = color
+        return this
+    }
+
+    fun setStatusBarColor(color: Int): ImgCrop {
+        this.setStatusBarColor = color
+        return this
+    }
+
+    fun setToolbarWidgetColor(color: Int): ImgCrop {
+        this.setToolbarWidgetColor = color
+        return this
+    }
+
+    fun setRootViewBackgroundColor(color: Int): ImgCrop {
+        this.setRootViewBackgroundColor = color
+        return this
+    }
+
+    fun setActiveControlsWidgetColor(color: Int): ImgCrop {
+        this.setActiveControlsWidgetColor = color
         return this
     }
 
