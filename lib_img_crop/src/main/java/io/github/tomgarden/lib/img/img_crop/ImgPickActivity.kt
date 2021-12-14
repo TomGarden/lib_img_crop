@@ -29,13 +29,13 @@ class ImgPickActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
                 toast(R.string.lib_img_crop_img_pick_cancel)
-                finish()
+                this@ImgPickActivity.selfFinish()
                 return@registerForActivityResult
             }
 
             val srcUri = activityResult.data?.data ?: let {
                 toast(R.string.lib_img_crop_img_pick_invalid)
-                finish()
+                this@ImgPickActivity.selfFinish()
                 return@registerForActivityResult
             }
 
@@ -49,17 +49,17 @@ class ImgPickActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
                 toast(R.string.lib_img_crop_img_crop_cancle)
-                finish()
+                this@ImgPickActivity.selfFinish()
                 return@registerForActivityResult
             }
             val resultIntent = activityResult.data ?: let {
                 toast(R.string.lib_img_crop_img_crop_invalid)
-                finish()
+                this@ImgPickActivity.selfFinish()
                 return@registerForActivityResult
             }
             val resultUri: Uri = UCrop.getOutput(resultIntent) ?: let {
                 toast(R.string.lib_img_crop_img_crop_invalid)
-                finish()
+                this@ImgPickActivity.selfFinish()
                 return@registerForActivityResult
             }
 
@@ -73,13 +73,14 @@ class ImgPickActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult: ActivityResult ->
             if (activityResult.resultCode != Activity.RESULT_OK) {
                 toast(R.string.lib_img_crop_img_crop_confirm_abandon)
-                finish()
+                selfFinish()
                 return@registerForActivityResult
             }
             Logger.d("裁切后的文件位置" + activityResult.data?.data)
             activityResult.data?.data?.let { uri ->
                 ImgCrop.getInstance().pickCropDone(uri)
             } ?: toast(R.string.lib_img_crop_img_crop_get_crop_result_failed)
+            this@ImgPickActivity.selfFinish()
         }
     }
 
@@ -127,4 +128,9 @@ class ImgPickActivity : ComponentActivity() {
     }
 
     private fun toast(strId: Int) = Toast.makeText(this, strId, Toast.LENGTH_SHORT).show()
+
+    private fun selfFinish() {
+        ImgCrop.clearInstance()
+        finish()
+    }
 }

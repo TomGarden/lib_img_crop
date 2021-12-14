@@ -9,10 +9,9 @@ import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.model.AspectRatio
 import com.yalantis.ucrop.view.CropImageView
 import io.github.tomgarden.lib.img.img_crop.copy_from_ucrom.UCropActivity
-import io.github.tomgarden.lib.img.img_crop.util.LibImgCropUtil
 import io.github.tomgarden.lib.log.Logger
 import java.io.File
-import java.net.URI
+import java.lang.ref.WeakReference
 
 /**
  * describe :
@@ -49,6 +48,10 @@ class ImgCrop private constructor() {
                     }
                 }
             }
+        }
+
+        fun clearInstance() {
+            INSTANCE = null
         }
     }
 
